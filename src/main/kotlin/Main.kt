@@ -23,23 +23,27 @@ var gson = Gson()
 
 
 
-fun main(args: Array<String>) = runBlocking {
-    val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress("https://rocky-wave-33213.herokuapp.com", 4567))
-    println("Started echo telnet server at ${server.localAddress}")
-    while (true) {
-        val socket = server.accept()
-        try {
+fun main(args: Array<String>) {
+    runBlocking {
+        val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress("127.0.0.1", 2323))
+        println("Started echo telnet server at ${server.localAddress}")
+        while (true) {
+            val socket = server.accept()
             val input = socket.openReadChannel()
             val output = socket.openWriteChannel(true)
-            val uuid = UUID.randomUUID()
-            val thisUnit = Unit(uuid, socket, input, output, true)
-            unitList.add(thisUnit)
-            output.writeStringUtf8(gson.toJson(uuid) + "\r\n")
-            println("Socket accepted: ${socket.remoteAddress}")
-            val reciver = launch { Reciver(socket, input, thisUnit) }
-            reciver.join()
-        } catch (e: IOException) {
-            socket.close()
+            val newUnit = Unit(UUID.randomUUID(), socket, input, output,true)
+            unitList.add(newUnit)
+            unitList.forEach{ println(it)}
+            output.writeStringUtf8(gson.toJson(newUnit.UUID)+"\r\n")
+            launch {
+                println("Socket accepted: ${socket.remoteAddress}")
+                try {
+                    val reciver = launch { Reciver(socket, input, newUnit) }
+                    reciver.join()
+                } catch (e: Exception) {
+                    socket.close()
+                }
+            }
         }
     }
 }

@@ -3,24 +3,34 @@ import kotlinx.coroutines.experimental.io.ByteReadChannel
 import kotlinx.coroutines.experimental.io.readUTF8Line
 
 suspend fun Reciver(socket: Socket, input:ByteReadChannel, thisUnit:Unit) {
-    while (true) {
+    var job = true
+    while (job==true) {
         val inputJSON = input.readUTF8Line()
-        val newCell: Cell = gson.fromJson(inputJSON, Cell::class.java)
-        if (newCell.line == "/stop") {
-            println(unitList)
-            val iterator = unitList.iterator()
-            while (iterator.hasNext()) {
+
+        when {
+            inputJSON == null -> {
+                println("Socket ${socket.remoteAddress} Closed")
+                job = false
+            }
+            inputJSON == "/stop" -> {
+                unitList.forEach { println(it) }
+                val iterator = unitList.iterator()
                 while (iterator.hasNext()) {
-                    val item = iterator.next()
-                    if (item == thisUnit) {
-                        iterator.remove()
+                    while (iterator.hasNext()) {
+                        val item = iterator.next()
+                        if (item == thisUnit) {
+                            iterator.remove()
+                        }
                     }
                 }
+                socket.close()
+                unitList.forEach { println(it) }
             }
-            println(unitList)
-        } else {
-            println("Cell accepted")
-            CellRouter(newCell)
+            else -> {
+                val newCell: Cell = gson.fromJson(inputJSON, Cell::class.java)
+                println("Cell accepted")
+                CellRouter(newCell)
+            }
         }
     }
 }
