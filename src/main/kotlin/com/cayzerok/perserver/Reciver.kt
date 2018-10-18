@@ -1,9 +1,11 @@
+package com.cayzerok.perserver
+
 import io.ktor.network.sockets.Socket
 import kotlinx.coroutines.experimental.io.ByteReadChannel
 import kotlinx.coroutines.experimental.io.ByteWriteChannel
 import kotlinx.coroutines.experimental.io.readUTF8Line
 
-suspend fun Reciver(socket: Socket, input:ByteReadChannel, output:ByteWriteChannel, thisUnit:Unit) {
+suspend fun Reciver(socket: Socket, input:ByteReadChannel, output:ByteWriteChannel, thisUnit: Unit) {
     var job = true
     while (job==true) {
         val inputJSON = input.readUTF8Line()
@@ -29,7 +31,7 @@ suspend fun Reciver(socket: Socket, input:ByteReadChannel, output:ByteWriteChann
             }
             else -> {
                 val newCell: Cell = gson.fromJson(inputJSON, Cell::class.java)
-                println("Cell accepted")
+                println("com.cayzerok.perserver.Cell accepted")
                 CellRouter(newCell)
             }
         }
