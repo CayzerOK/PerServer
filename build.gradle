@@ -6,6 +6,7 @@ buildscript {
 
     repositories {
         jcenter()
+        mavenCentral()
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
     }
     dependencies {
@@ -16,7 +17,7 @@ apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'application'
 
-mainClassName = 'MainKt'
+mainClassName = 'io.ktor.server.netty.DevelopmentEngine'
 
 sourceCompatibility = 1.8
 compileKotlin { kotlinOptions.jvmTarget = "1.8" }
@@ -24,9 +25,15 @@ compileTestKotlin { kotlinOptions.jvmTarget = "1.8" }
 
 kotlin { experimental { coroutines "enable" } }
 
-task stage(dependsOn: ['build', 'clean'])
+task stage(dependsOn: ['build', 'clean','copyToLib'])
 build.mustRunAfter clean
 
+task copyToLib(type: Copy) {
+    into "$buildDir/lib"
+    from(configurations.compile)
+}
+
+stage.dependsOn(copyToLib)
 
 repositories {
     mavenCentral()

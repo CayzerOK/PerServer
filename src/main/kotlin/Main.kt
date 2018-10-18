@@ -1,11 +1,12 @@
 
 import com.google.gson.Gson
+import io.ktor.application.*
+import io.ktor.features.*
 import io.ktor.network.selector.*
 import io.ktor.network.sockets.*
 import io.ktor.network.util.ioCoroutineDispatcher
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.io.writeStringUtf8
-import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.util.*
 
@@ -22,15 +23,9 @@ data class Cell(
 var gson = Gson()
 
 
-//fun Application.main(){
-//    install(Routing)
-//    install(DefaultHeaders)
-//    routing {
-//        get("/") {
- //           call.respondText("Request uri: ${call.request.uri}")
- //       }
- //   }
-fun main(args:Array<String>){
+fun Application.main(){
+    install(CallLogging)
+//fun main(args:Array<String>){
     runBlocking {
         val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress("127.0.0.1",8080))
         println("Started echo telnet server at ${server.localAddress}")
