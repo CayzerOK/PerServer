@@ -1,18 +1,19 @@
 import io.ktor.network.sockets.Socket
 import kotlinx.coroutines.experimental.io.ByteReadChannel
+import kotlinx.coroutines.experimental.io.ByteWriteChannel
 import kotlinx.coroutines.experimental.io.readUTF8Line
 
-suspend fun Reciver(socket: Socket, input:ByteReadChannel, thisUnit:Unit) {
+suspend fun Reciver(socket: Socket, input:ByteReadChannel, output:ByteWriteChannel, thisUnit:Unit) {
     var job = true
     while (job==true) {
         val inputJSON = input.readUTF8Line()
-
-        when {
-            inputJSON == null -> {
+        println(inputJSON)
+        when(inputJSON) {
+            null -> {
                 println("Socket ${socket.remoteAddress} Closed")
                 job = false
             }
-            inputJSON == "/stop" -> {
+            "/stop" -> {
                 unitList.forEach { println(it) }
                 val iterator = unitList.iterator()
                 while (iterator.hasNext()) {

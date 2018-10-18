@@ -5,7 +5,7 @@ import io.ktor.network.sockets.*
 import io.ktor.network.util.ioCoroutineDispatcher
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.io.writeStringUtf8
-import java.io.IOException
+import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.util.*
 
@@ -22,10 +22,17 @@ data class Cell(
 var gson = Gson()
 
 
-
-fun main(args: Array<String>) {
+//fun Application.main(){
+//    install(Routing)
+//    install(DefaultHeaders)
+//    routing {
+//        get("/") {
+ //           call.respondText("Request uri: ${call.request.uri}")
+ //       }
+ //   }
+fun main(args:Array<String>){
     runBlocking {
-        val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress("127.0.0.1", 2323))
+        val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress("127.0.0.1",8080))
         println("Started echo telnet server at ${server.localAddress}")
         while (true) {
             val socket = server.accept()
@@ -38,7 +45,7 @@ fun main(args: Array<String>) {
             launch {
                 println("Socket accepted: ${socket.remoteAddress}")
                 try {
-                    val reciver = launch { Reciver(socket, input, newUnit) }
+                    val reciver = launch { Reciver(socket, input, output, newUnit) }
                     reciver.join()
                 } catch (e: Exception) {
                     socket.close()
