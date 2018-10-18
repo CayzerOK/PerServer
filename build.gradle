@@ -28,7 +28,7 @@ compileTestKotlin { kotlinOptions.jvmTarget = "1.8" }
 
 kotlin { experimental { coroutines "enable" } }
 
-task stage(dependsOn: ['build', 'clean','copyToLib','installApp'])
+task stage(dependsOn: ['build', 'clean','copyToLib'])
 build.mustRunAfter clean
 
 task copyToLib(type: Copy) {
