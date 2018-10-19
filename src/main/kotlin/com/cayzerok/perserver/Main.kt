@@ -28,7 +28,7 @@ var gson = Gson()
 
 fun main(args:Array<String>) {
     runBlocking {
-        val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress(Inet4Address.getLocalHost().hostAddress, 4567))
+        val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress(Inet4Address.getLocalHost().hostAddress, 80))
         println("Started echo telnet server at ${server.localAddress}")
         while (true) {
             val socket = server.accept()
