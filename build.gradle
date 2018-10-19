@@ -32,7 +32,7 @@ task stage(dependsOn: ['build', 'clean','copyToLib'])
 build.mustRunAfter clean
 
 task copyToLib(type: Copy) {
-    into "$buildDir/lib"
+    into "$buildDir/libs"
     from(configurations.compile)
 }
 
