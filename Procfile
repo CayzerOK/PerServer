@@ -1,1 +1,1 @@
-web:    java -jar target/PerServer.jar
+web:    java -jar target/helloworld.jar
