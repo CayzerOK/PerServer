@@ -31,7 +31,7 @@ suspend fun Reciver(socket: Socket, input:ByteReadChannel, output:ByteWriteChann
             }
             else -> {
                 val newCell: Cell = gson.fromJson(inputJSON, Cell::class.java)
-                println("com.cayzerok.perserver.Cell accepted")
+                println("Cell accepted")
                 CellRouter(newCell)
             }
         }
