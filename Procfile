@@ -1,1 +1,1 @@
-web:    java -jar target/PerServer-0.3.2.jar
+web:    java -jar target/PerServer.jar
