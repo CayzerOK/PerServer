@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="PerServer_main:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/PerServer_main_jar</output-path>
+    <output-path>$PROJECT_DIR$/target/PerServer_main_jar</output-path>
     <root id="archive" name="PerServer_main.jar">
       <element id="module-output" name="PerServer_main" />
       <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.2.71/5470d1f752cd342edb77e1062bac07e838d2cea4/kotlin-stdlib-jdk8-1.2.71.jar" path-in-jar="/" />
