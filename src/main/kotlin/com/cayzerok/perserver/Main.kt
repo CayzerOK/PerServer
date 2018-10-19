@@ -3,6 +3,7 @@ import com.google.gson.Gson
 import io.ktor.network.selector.*
 import io.ktor.network.sockets.*
 import io.ktor.network.util.ioCoroutineDispatcher
+import io.ktor.server.engine.applicationEngineEnvironment
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.io.writeStringUtf8
 import java.net.Inet4Address
@@ -28,8 +29,8 @@ var gson = Gson()
 
 fun main(args:Array<String>) {
     runBlocking {
-        val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress(Inet4Address.getLocalHost().hostAddress, 80))
-        println("Started echo telnet server at ${server.localAddress}")
+        val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress(Inet4Address.getLocalHost().hostAddress, System.getenv("PORT").toInt() ))
+        println("Started routing server at ${server.localAddress}")
         while (true) {
             val socket = server.accept()
             val input = socket.openReadChannel()
