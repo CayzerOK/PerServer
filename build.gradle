@@ -54,7 +54,7 @@ dependencies {
     compile "io.ktor:ktor-network:$ktor_version"
 }
 
-task stage(dependsOn: ['build', 'fatJar', 'clean','copyToLib'])
+task stage(dependsOn: ['build', 'fatJar', 'clean','copyToLib', 'run'])
 build.mustRunAfter clean
 
 task copyToLib(type: Copy) {
