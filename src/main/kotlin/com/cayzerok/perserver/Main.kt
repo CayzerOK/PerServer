@@ -42,7 +42,7 @@ fun main(args:Array<String>) {
             launch {
                 println("Socket accepted: ${socket.remoteAddress}")
                 try {
-                    val reciver = launch { Reciver(socket, input, output, newUnit) }
+                    val reciver = launch { Reciver(socket, input, newUnit) }
                     reciver.join()
                 } catch (e: Exception) {
                     socket.close()
