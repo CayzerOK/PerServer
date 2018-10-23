@@ -3,15 +3,11 @@ import com.google.gson.Gson
 import io.ktor.network.selector.*
 import io.ktor.network.sockets.*
 import io.ktor.network.util.ioCoroutineDispatcher
-import io.ktor.server.engine.applicationEngineEnvironment
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.io.writeStringUtf8
 import java.net.Inet4Address
 import java.net.InetSocketAddress
 import java.util.*
-import java.net.InetAddress
-import java.util.Enumeration
-import java.net.NetworkInterface
 
 
 
@@ -29,7 +25,7 @@ var gson = Gson()
 
 fun main(args:Array<String>) {
     runBlocking {
-        val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress(Inet4Address.getLocalHost().hostAddress, System.getenv("PORT").toInt() ))
+        val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress(Inet4Address.getLocalHost().hostAddress, 8080 ))
         println("Started routing server at ${server.localAddress}")
         while (true) {
             val socket = server.accept()
@@ -44,8 +40,20 @@ fun main(args:Array<String>) {
                 try {
                     val reciver = launch { Reciver(socket, input, newUnit) }
                     reciver.join()
-                } catch (e: Exception) {
+                } catch (e: RuntimeException) {
+                    unitList.forEach { println(it) }
+                    val iterator = unitList.iterator()
+                    while (iterator.hasNext()) {
+                        while (iterator.hasNext()) {
+                            val item = iterator.next()
+                            if (item == newUnit) {
+                                iterator.remove()
+                            }
+                        }
+                    }
+                    println("Unit removed")
                     socket.close()
+                    unitList.forEach { println(it) }
                 }
             }
         }
