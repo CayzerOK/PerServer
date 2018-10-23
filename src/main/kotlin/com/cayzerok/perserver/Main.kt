@@ -26,7 +26,7 @@ var gson = Gson()
 fun main(args:Array<String>) {
     runBlocking {
         val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress(Inet4Address.getLocalHost().hostAddress, 8080 ))
-        println("Started routing server at ${server.localAddress}")
+        println("Server started at: ${server.localAddress}")
         while (true) {
             val socket = server.accept()
             val input = socket.openReadChannel()
@@ -40,8 +40,7 @@ fun main(args:Array<String>) {
                 try {
                     val reciver = launch { Reciver(socket, input, newUnit) }
                     reciver.join()
-                } catch (e: RuntimeException) {
-                    unitList.forEach { println(it) }
+                } finally {
                     val iterator = unitList.iterator()
                     while (iterator.hasNext()) {
                         while (iterator.hasNext()) {
@@ -53,7 +52,6 @@ fun main(args:Array<String>) {
                     }
                     println("Unit removed")
                     socket.close()
-                    unitList.forEach { println(it) }
                 }
             }
         }

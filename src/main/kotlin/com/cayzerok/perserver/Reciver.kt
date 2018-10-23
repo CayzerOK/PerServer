@@ -13,9 +13,6 @@ suspend fun Reciver(socket: Socket, input:ByteReadChannel, thisUnit: Unit) {
         when(inputJSON) {
             null -> {
                 println("Socket ${socket.remoteAddress} Closed")
-                job = false
-            }
-            "/stop" -> {
                 unitList.forEach { println(it) }
                 val iterator = unitList.iterator()
                 while (iterator.hasNext()) {
