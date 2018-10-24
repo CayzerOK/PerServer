@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: com.cayzerok.perserver.MainKt
+Main-Class: io.ktor.server.netty.DevelopmentEngine
 

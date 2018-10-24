@@ -1,5 +1,6 @@
 package com.cayzerok.perserver
 import com.google.gson.Gson
+import io.ktor.application.Application
 import io.ktor.network.selector.*
 import io.ktor.network.sockets.*
 import io.ktor.network.util.ioCoroutineDispatcher
@@ -23,9 +24,9 @@ data class Cell(
 
 var gson = Gson()
 
-fun main(args:Array<String>) {
+fun Application.main() {
     runBlocking {
-        val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress(Inet4Address.getLocalHost().hostAddress, 8080 ))
+        val server = aSocket(ActorSelectorManager(ioCoroutineDispatcher)).tcp().bind(InetSocketAddress("0.0.0.0", 8080 ))
         println("Server started at: ${server.localAddress}")
         while (true) {
             val socket = server.accept()

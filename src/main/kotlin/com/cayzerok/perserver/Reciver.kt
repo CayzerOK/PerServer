@@ -6,8 +6,7 @@ import kotlinx.coroutines.experimental.io.ByteWriteChannel
 import kotlinx.coroutines.experimental.io.readUTF8Line
 
 suspend fun Reciver(socket: Socket, input:ByteReadChannel, thisUnit: Unit) {
-    var job = true
-    while (job==true) {
+    while (true) {
         val inputJSON = input.readUTF8Line()
         println(inputJSON)
         when(inputJSON) {
